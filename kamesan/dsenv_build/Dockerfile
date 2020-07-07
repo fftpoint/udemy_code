@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:latest
 RUN apt-get update && apt-get install -y \
     sudo \
     wget \
@@ -11,4 +11,4 @@ ENV PATH /opt/anaconda3/bin:$PATH
 
 RUN pip install --upgrade pip
 WORKDIR /
-CMD ["jupytar", "lab", "--ip=0.0.0.0", "--allow-root", "--LabApp.token=''"]
+CMD ["jupyter","lab","--ip=0.0.0.0","--allow-root","--LabApp.token=''"]
