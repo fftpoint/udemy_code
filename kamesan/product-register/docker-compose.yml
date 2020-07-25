@@ -26,3 +26,4 @@ services:
         environment:
             - 'POSTGRES_USER=postgres'
             - 'POSTGRES_PASSWORD=postgres'
+            - 'POSTGRESS_HOST_AUTH_METHOD=trust'
