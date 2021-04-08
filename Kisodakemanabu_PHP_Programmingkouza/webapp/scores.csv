@@ -6,3 +6,4 @@ Math,Betty,84
 English,Takeru,100
 Science,rrr,44
 English,ddd,333
+Math,<script>alert('Injection')</script>,100

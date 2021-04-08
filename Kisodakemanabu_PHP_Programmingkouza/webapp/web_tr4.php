@@ -1,6 +1,6 @@
 <?php
-$x = $_POST["x"];
-$y = $_POST["y"];
+$x = (int)filter_input(INPUT_POST, "x");
+$y = (int)filter_input(INPUT_POST, "y");
 $sum = $x + $y;
 ?>
 

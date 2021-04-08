@@ -1,5 +1,18 @@
 <?php
-$name = $_GET["name"];
+// $name = null;
+// if ($isset($_GET["name"])) {
+//     $name = null;
+// } elseif (!is_string($_GET["name"])) {
+//     $name = false;
+// } else {
+//     $name = $_GET["name"];
+// }
+
+// $name = filter_input(INPUT_GET, "name");
+$name = (string)filter_input(INPUT_GET, "name");
+
+// var_dump($name);
+// die("debag");
 
 $names = file("names.txt", FILE_IGNORE_NEW_LINES);
 
@@ -12,6 +25,7 @@ if ($name !== "") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
