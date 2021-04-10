@@ -15,3 +15,5 @@ function checkPostalCode($str){
 }
 
 var_dump(checkPostalCode($postCode));
+
+?>
