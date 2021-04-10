@@ -52,4 +52,58 @@ foreach ($members_2 as $member => $detail) {
         echo  $member . 'の' . $key . 'は' . $value . 'です。' . '<br>';
     }
 }
+//contine, break
+for ($i=0; $i < 10; $i++) { 
+    if ($i === 5) {
+        // break;
+        continue;
+    }
+    echo $i;
+}
+
+echo '<br>';
+
+$j = 0;
+while ($j < 5) {
+    echo $j;
+    $j++;
+}
+
+echo '<br>';
+
+$k = 0;
+do {
+    echo $k;
+    $k++;
+} while ($k < 5);
+
+echo '<br>';
+
+// switch
+// if分の方が見やすい
+
+// $data = 1;
+// swhitchの比較は==であり、型を見ない
+$data = '1';
+
+switch ($data === 1) {
+    case 1:
+        echo '1です';
+        break;
+
+    case 2:
+        echo '2です';
+        break;
+
+    case 3:
+        echo '3です';
+        break;
+
+    default:
+        echo '1-3ではありません';
+        break;
+}
+
+
 ?>
+
