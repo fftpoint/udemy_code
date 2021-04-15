@@ -117,13 +117,11 @@ if (!empty($_POST['btn_submit'])) {
 
                 <div class="mb-3">
                     <label for="contact">お問い合わせ内容</label>
-                    <textarea class="form-control" id="contact" row="3" name="contact">
-                    <?php if(!empty($_POST['contact'])){echo h($_POST['contact']);} ?>
-                    </textarea>
+                    <textarea class="form-control" id="contact" row="3" name="contact"><?php if(!empty($_POST['contact'])){echo h($_POST['contact']);} ?></textarea>
                 </div>
 
                 <div class="mb-3 form-check">
-                    <input class="form-check-input" type="checkbox" id="caution" name="caution" value="1">注意事項のチェックする
+                    <input class="form-check-input" type="checkbox" id="caution" name="caution" value="1">
                     <label class="form-check-label" for="caution">注意事項にチェックする</label>
                 </div>
 
@@ -204,8 +202,15 @@ if (!empty($_POST['btn_submit'])) {
 <?php endif; ?>
 
 <?php if ($pageFlag === 2) : ?>
-    送信が完了しました。
-    <?php unset($_SESSION['csrToken']); ?>
+    <?php if ($_POST['csrf'] === $_SESSION['csrToken']) : ?>
+        <?php
+            require '../maintenance/insert.php';
+
+            insertConnect($_POST);
+        ?>
+        送信が完了しました。
+        <?php unset($_SESSION['csrToken']); ?>
+    <?php endif; ?>
 <?php endif; ?>
 
     <!-- Optional JavaScript; choose one of the two! -->
