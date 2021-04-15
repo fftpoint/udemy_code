@@ -16,7 +16,7 @@ $test_2 = 456;
 
 echo $test;
 var_dump($test);
-exit
+exit;
 echo $test_2;
 
 phpinfo();
