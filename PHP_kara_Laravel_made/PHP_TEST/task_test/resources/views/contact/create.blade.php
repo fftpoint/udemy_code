@@ -15,7 +15,7 @@
                     @endif
 
                     {{ __('createです') }}
-                    <form action="{{ route('contact.store') }}" method="post">
+                    <form action="{{ route('contact.store') }}" method="POST">
                         @csrf
                         氏名
                         <input type="text" name="your_name">
@@ -41,6 +41,7 @@
                             <option value="3">30歳~39歳</option>
                             <option value="4">40歳~49歳</option>
                             <option value="5">50歳~59歳</option>
+                            <option value="6">60歳~</option>
                         </select>
                         <br>
                         お問い合わせ内容
