@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +23,24 @@ Route::get('/', function () {
 
 Route::get('tests/test', [TestController::class, 'index']);
 
+// Route::get('contact/index', [ContactFormController::class, 'index']);
+
+// Route::prefix('contact')->group(function () {
+//     Route::get('/index', [TestController::class, 'index'])->middleware('auth');
+// });
+
+Route::group(['prefix' => 'contact', 'middleware' => 'auth'], function(){
+    Route::get('index', [ContactFormController::class, 'index'])->name('contact.index');
+    Route::get('create', [ContactFormController::class, 'create'])->name('contact.create');
+    Route::post('store', [ContactFormController::class, 'store'])->name('contact.store');
+});
+
+
 Route::resource('contacts', ContactFormController::class);
 // Route::resource('contacts', ContactFormController::class)->only([
 //     'index', 'show'
 // ]);
 
-// Auth::routes();
+Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
