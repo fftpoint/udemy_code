@@ -14,6 +14,16 @@
                         </div>
                     @endif
 
+                    @if ($errors->any())
+                        <div>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     {{ __('createです') }}
                     <form action="{{ route('contact.store') }}" method="POST">
                         @csrf

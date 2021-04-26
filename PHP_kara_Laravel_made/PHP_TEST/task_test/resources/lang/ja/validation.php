@@ -147,7 +147,15 @@ return [
     */
 
     'attributes' => [
-        'password'=>'パスワード', //追記
+        'password' => 'パスワード', //追記
+        'your_name' => '氏名',
+        'title' => '件名',
+        'email' => 'メールアドレス',
+        'url' => 'ホームページ',
+        'gender' => '性別',
+        'age' => '年齢',
+        'contact' => 'お問い合わせ内容',
+        'caution' => '注意事項'
     ],
 
 ];
