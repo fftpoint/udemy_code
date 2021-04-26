@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Controller;
 
 /*
@@ -22,6 +23,8 @@ Route::get('/', function () {
 });
 
 Route::get('tests/test', [TestController::class, 'index']);
+
+Route::get('shops/index', [ShopController::class, 'index']);
 
 // Route::get('contact/index', [ContactFormController::class, 'index']);
 
