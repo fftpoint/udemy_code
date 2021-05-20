@@ -1,0 +1,46 @@
+php artisan migrate が失敗するケース
+
+■win/mac共通
+
+・XAMPP/MAMPが立ち上がっていない
+→起動する
+
+・MySQLのポート番号が違う
+→ポート番号を修正する
+
+・.envの情報が間違っている
+→ユーザー名、パスワードなどを再確認
+
+・phpがXAMPP/MAMP以外の箇所にインストールされている
+→不要なphpは削除
+
+■確認方法
+
+(mac)
+コマンドラインから mysql -u root とうって
+mysqlにつながるか確認する
+
+→rootでログインできるなら、
+.envに設定している情報が違う可能性あり
+
+
+■解決したケース
+
+1.(Mac) AppCleanerを使ってMAMP/XAMPPと付随するファイルを全て削除し改めてインストール
+
+2. 再度プロジェクトから作成。
+
+
+3.
+phpmyadminでユーザーを作る際に
+%ではなくlocalhostで設定し、
+.envファイルのDB_HOSTもlocalhostと設定しつつ、
+config/database.phpのunix_socketの部分をデフォルトのものではなく
+
+(macの場合)
+'unix_socket' => '/Applications/MAMP/tmp/mysql/mysql.sock',
+
+(winの場合)
+'unix_socket' => "C:/xampp/mysql/mysql.sock"
+
+と設定する
