@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "IDとパスワードを入力してください"
+AuthUserFile /Applications/MAMP/htdocs/udemy_code/PHP_kara_Laravel_made/PHP_TEST/maintenance/.htpasswd
+require valid-user
