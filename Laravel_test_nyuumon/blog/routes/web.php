@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\BlogViewController;
 use Illuminate\Support\Facades\Route;
+use Tests\Feature\Controllers\BlogViewControllerTest;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [BlogViewController::class, 'index']);
