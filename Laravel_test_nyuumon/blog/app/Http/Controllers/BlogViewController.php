@@ -21,6 +21,6 @@ class BlogViewController extends Controller
     }
     public function show(Blog $blog)
     {
-        return view('blog.show', compact($blog));
+        return view('blog.show', compact('blog'));
     }
 }

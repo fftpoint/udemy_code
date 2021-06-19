@@ -58,6 +58,5 @@ class BlogTest extends TestCase
         $this->assertFalse($blogs->contains($blog1));
         $this->assertTrue($blogs->contains($blog2));
         $this->assertTrue($blogs->contains($blog3));
-
     }
 }
