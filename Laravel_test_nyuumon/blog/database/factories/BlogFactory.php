@@ -36,11 +36,21 @@ class BlogFactory extends Factory
             'body' => $this->faker->realText(100),
         ];
     }
+
     public function seeding()
     {
         return $this->state(function (array $attributes) {
             return [
                 'status' => $this->faker->biasedNumberBetween(0, 1, ['\Faker\Provider\Biased', 'linearHigh']),
+            ];
+        });
+    }
+
+    public function closed()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => Blog::CLOSED,
             ];
         });
     }

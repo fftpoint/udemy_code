@@ -56,9 +56,8 @@ class BlogViewControllerTest extends TestCase
      */
     public function ブログの一覧で、非公開のブログは表示されない()
     {
-        Blog::factory()->create([
-            'status' => Blog::CLOSED,
-            'title' => 'ブログA',
+        Blog::factory()->closed()->create([
+            'title' => 'ブログA'
         ]);
         Blog::factory()->create(['title' => 'ブログB']);
         Blog::factory()->create(['title' => 'ブログC']);
@@ -86,6 +85,19 @@ class BlogViewControllerTest extends TestCase
             ->assertOk()
             ->assertSee($blog->title)
             ->assertSee($blog->user->name);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function ブログで非公開のものは、詳細画面は表示できない()
+    {
+        $blog = Blog::factory()->closed()->create();
+
+        $this->get('blogs/'.$blog->id)
+            ->assertForbidden();
     }
 
     /**

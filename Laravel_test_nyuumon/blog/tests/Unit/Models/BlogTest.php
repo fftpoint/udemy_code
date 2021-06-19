@@ -44,7 +44,7 @@ class BlogTest extends TestCase
      *
      * @return void
      */
-    function ブログの公開・非公開のscope()
+    public function ブログの公開・非公開のscope()
     {
         $blog1 = Blog::factory()->create([
             'status' => Blog::CLOSED,
@@ -58,5 +58,21 @@ class BlogTest extends TestCase
         $this->assertFalse($blogs->contains($blog1));
         $this->assertTrue($blogs->contains($blog2));
         $this->assertTrue($blogs->contains($blog3));
+    }
+
+    /**
+     * @test isClosed
+     *
+     * @return void
+     */
+    public function ブログで非公開時はTrueを返し、公開時はFalseを返す()
+    {
+        $blog = Blog::factory()->make();
+
+        $this->assertFalse($blog->isClosed());
+
+        $blog = Blog::factory()->closed()->make();
+
+        $this->assertTrue($blog->isClosed());
     }
 }
