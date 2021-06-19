@@ -3,4 +3,4 @@
 - /Applications/MAMP/htdocs/udemy_code/Laravel_test_nyumon
 
 ## URL
-- localhost:8888/udemy_blog
+- blog.abc:8888/udemy_blog
