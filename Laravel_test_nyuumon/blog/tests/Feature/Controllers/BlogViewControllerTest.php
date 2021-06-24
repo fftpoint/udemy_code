@@ -3,10 +3,16 @@
 namespace Tests\Feature\Controllers;
 
 use App\Models\Blog;
+use App\Models\Comment;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+
+/**
+ * @see App\Http\Controllers\BlogViewController;
+ */
 
 class BlogViewControllerTest extends TestCase
 {
@@ -65,11 +71,11 @@ class BlogViewControllerTest extends TestCase
         $this->withoutExceptionHandling();
 
         $this->get('/')
-        ->assertViewIs('index')
-        ->assertOk()
-        ->assertDontSee('ブログA')
-        ->assertSee('ブログB')
-        ->assertSee('ブログC');
+            ->assertViewIs('index')
+            ->assertOk()
+            ->assertDontSee('ブログA')
+            ->assertSee('ブログB')
+            ->assertSee('ブログC');
     }
 
     /**
@@ -81,14 +87,14 @@ class BlogViewControllerTest extends TestCase
     {
         $blog = Blog::factory()->create();
 
-        $this->get('blogs/'.$blog->id)
+        $this->get('blogs/' . $blog->id)
             ->assertOk()
             ->assertSee($blog->title)
             ->assertSee($blog->user->name);
     }
 
     /**
-     * @test
+     * @test show
      *
      * @return void
      */
@@ -96,8 +102,70 @@ class BlogViewControllerTest extends TestCase
     {
         $blog = Blog::factory()->closed()->create();
 
-        $this->get('blogs/'.$blog->id)
+        $this->get('blogs/' . $blog->id)
             ->assertForbidden();
+    }
+
+    /**
+     * @test show
+     *
+     * @return void
+     */
+    public function クリスマスの日は、メリークリスマスと表示される()
+    {
+        $blog = Blog::factory()->create();
+
+        Carbon::setTestNow('2021-12-24');
+
+        $this->get('blogs/' . $blog->id)
+            ->assertOk()
+            ->assertDontSee('メリークリスマス！');
+
+        Carbon::setTestNow('2021-12-25');
+
+        $this->get('blogs/' . $blog->id)
+            ->assertOk()
+            ->assertSee('メリークリスマス！');
+    }
+
+    /**
+     * @test show
+     *
+     * @return void
+     */
+    public function ブログの詳細画面が表示でき、コメントが古い順に表示される()
+    {
+        // $blog = Blog::factory()->create();
+
+        // Comment::factory()->create([
+        //     'created_at' => now()->sub('2 days'),
+        //     'name' => '太郎',
+        //     'blog_id' => $blog->id,
+        // ]);
+        // Comment::factory()->create([
+        //     'created_at' => now()->sub('3 days'),
+        //     'name' => '次郎',
+        //     'blog_id' => $blog->id,
+        // ]);
+        // Comment::factory()->create([
+        //     'created_at' => now()->sub('1 days'),
+        //     'name' => '三郎',
+        //     'blog_id' => $blog->id,
+        // ]);
+
+        $blog = Blog::factory()->withCommentData([
+            ['created_at' => now()->sub('2 days'),'name' => '太郎'],
+            ['created_at' => now()->sub('3 days'),'name' => '次郎'],
+            ['created_at' => now()->sub('1 days'),'name' => '三郎'],
+        ])->create();
+
+        $this->get('blogs/' . $blog->id)
+            ->assertOk()
+            ->assertSee($blog->title)
+            ->assertSee($blog->user->name)
+            ->assertSeeInOrder(['次郎', '太郎', '三郎']);
+
+        // dd($blog->comments->toArray());
     }
 
     /**
