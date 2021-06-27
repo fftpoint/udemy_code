@@ -4,7 +4,7 @@
 
 <h1>ログイン画面</h1>
 
-<form action="post">
+<form method="post">
 @csrf
 
 @include('inc.error')
@@ -19,5 +19,9 @@
 <input type="submit" value="　送信する　">
 
 </form>
+
+<p style="margin-top:30px;">
+    <a href="/signup">新規ユーザー登録</a>
+</p>
 
 @endsection

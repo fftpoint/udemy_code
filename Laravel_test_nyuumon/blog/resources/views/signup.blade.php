@@ -4,7 +4,7 @@
 
 <h1>ユーザー登録</h1>
 
-<form action="post">
+<form method="post">
 @csrf
 
 @include('inc.error')
