@@ -6,6 +6,7 @@ use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertCount;
@@ -33,6 +34,7 @@ class BlogMypageControllerTest extends TestCase
         $this->post('mypage/blogs/create', [])->assertRedirect($url);
         $this->get('mypage/blogs/edit/1')->assertRedirect($url);
         $this->post('mypage/blogs/edit/1')->assertRedirect($url);
+        $this->delete('mypage/blogs/delete/1')->assertRedirect($url);
     }
 
     /**
@@ -82,7 +84,7 @@ class BlogMypageControllerTest extends TestCase
         $this->login();
 
         $this->post('mypage/blogs/create', $validData)
-            ->assertRedirect('mypage/blogs/edit/1');
+            ->assertRedirect('mypage/blogs/edit/'.DB::table('blogs')->where('title', $validData['title'])->value('id'));
             $this->assertDatabaseHas('blogs', $validData);
     }
 
@@ -101,8 +103,9 @@ class BlogMypageControllerTest extends TestCase
         unset($validData['status']);
 
         $this->post('mypage/blogs/create', $validData)
-            ->assertRedirect('mypage/blogs/edit/1');
-            $this->assertDatabaseHas('blogs', $validData);
+            ->assertRedirect('mypage/blogs/edit/'.DB::table('blogs')->where('title', $validData['title'])->value('id'));
+
+        $this->assertDatabaseHas('blogs', $validData);
 
         $validData['status'] = 0;
 
@@ -184,7 +187,35 @@ class BlogMypageControllerTest extends TestCase
      */
     public function 他人のブログは削除できない()
     {
-        $this->markTestIncomplete('未実装');
+        $blog = Blog::factory()->create();
+
+        $this->login();
+
+        $this->delete('mypage/blogs/delete/'.$blog->id)
+            ->assertForbidden();
+
+        $this->assertCount(1, Blog::all());
+    }
+
+    /**
+     * @test destroy
+     *
+     * @return void
+     */
+    public function 自分のブログは削除できる()
+    {
+        // $this->withoutExceptionHandling();
+        $blog = Blog::factory()->create();
+
+        $this->login($blog->user);
+
+        $this->delete('mypage/blogs/delete/'.$blog->id)
+            ->assertRedirect('mypage/blogs');
+
+        // 削除のassert
+        // $this->assertDatabaseMissing('blogs', ['id' => $blog->id]); // $blog->only('id')
+        // $this->assertDatabaseMissing('blogs', ['id' => $blog->only('id')]); //
+        $this->assertDeleted($blog);
     }
 
     /**

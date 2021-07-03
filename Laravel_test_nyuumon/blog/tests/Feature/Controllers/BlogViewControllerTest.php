@@ -2,13 +2,21 @@
 
 namespace Tests\Feature\Controllers;
 
+use App\Http\Middleware\BlogShowLimit;
 use App\Models\Blog;
 use App\Models\Comment;
 use App\Models\User;
+use App\StrRandom;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Facades\Illuminate\Support\Str;
+use Mockery\MockInterface;
 use Tests\TestCase;
+
+use function PHPUnit\Framework\throwException;
 
 /**
  * @see App\Http\Controllers\BlogViewController;
@@ -18,6 +26,7 @@ class BlogViewControllerTest extends TestCase
 {
     # テスト実行時にDBを初期化し、テスト終了後に初期化する
     use RefreshDatabase;
+    // use WithoutMiddleware;
     /**
      * @test index
      *
@@ -100,6 +109,8 @@ class BlogViewControllerTest extends TestCase
      */
     public function ブログで非公開のものは、詳細画面は表示できない()
     {
+        $this->withoutMiddleware(BlogShowLimit::class);
+
         $blog = Blog::factory()->closed()->create();
 
         $this->get('blogs/' . $blog->id)
@@ -113,6 +124,8 @@ class BlogViewControllerTest extends TestCase
      */
     public function クリスマスの日は、メリークリスマスと表示される()
     {
+        $this->withoutMiddleware(BlogShowLimit::class);
+
         $blog = Blog::factory()->create();
 
         Carbon::setTestNow('2021-12-24');
@@ -135,6 +148,7 @@ class BlogViewControllerTest extends TestCase
      */
     public function ブログの詳細画面が表示でき、コメントが古い順に表示される()
     {
+        $this->withoutMiddleware(BlogShowLimit::class);
         // $blog = Blog::factory()->create();
 
         // Comment::factory()->create([
@@ -166,6 +180,55 @@ class BlogViewControllerTest extends TestCase
             ->assertSeeInOrder(['次郎', '太郎', '三郎']);
 
         // dd($blog->comments->toArray());
+    }
+
+    /**
+     * @test show
+     *
+     * @return void
+     */
+    public function ブログの詳細画面で、ランダムな文字列が10文字表示される()
+    {
+        $this->withoutExceptionHandling();
+        // $this->withoutMiddleware(BlogShowLimit::class);
+
+        $blog = Blog::factory()->create();
+
+        // Facadeの場合のモック
+        // Str::shouldReceive('random')
+        // ->once()
+        // ->with(10)
+        // ->andReturn('HELLO_RAND');
+
+        // Facade以外のモック
+        // $mock = new Class ()
+        // {
+        //     public function random(int $len)
+        //     {
+        //         if ($len != 10){
+        //             throw new Exception('引数が違う');
+        //         }
+        //         return 'HELLO_RAND';
+        //     }
+        // };
+
+
+        // Mockeryの場合
+        // $mock = Mockery::mock(StrRandom::class);
+
+        // $mock->shouldReceive('random')->once()->with(10)->andReturn('HELLO_RAND');
+
+        // $this->app->instance(StrRandom::class, $mock);
+
+        $this->mock(StrRandom::class, function (MockInterface $mock)
+        {
+            $mock->shouldReceive('random')->once()->with(10)->andReturn('HELLO_RAND');
+        });
+
+        $this->get('blogs/'.$blog->id)
+            ->assertOk()
+            ->assertSee('HELLO_RAND');
+
     }
 
     /**

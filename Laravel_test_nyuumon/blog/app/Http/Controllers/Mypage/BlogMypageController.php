@@ -50,7 +50,7 @@ class BlogMypageController extends Controller
         if ($request->user()->isNot($blog->user)) {
             abort(403);
         }
-        
+
         $data = $this->validateInput();
 
         $data['status'] = $request->boolean('status');
@@ -59,6 +59,17 @@ class BlogMypageController extends Controller
 
         return redirect(route('mypage.blog.edit', $blog))
             ->with('status', 'ブログを更新しました');
+    }
+
+    public function destroy(Blog $blog, Request $request)
+    {
+        if ($request->user()->isNot($blog->user)) {
+            abort(403);
+        }
+        
+        $blog->delete();
+
+        return redirect('mypage/blogs');
     }
 
     private function validateInput()

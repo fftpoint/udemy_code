@@ -23,6 +23,7 @@ use Tests\Feature\Controllers\BlogViewControllerTest;
 // });
 
 Route::get('/', [BlogViewController::class, 'index']);
+// Route::get('blogs/{blog}', [BlogViewController::class, 'show'])->middleware('blog.show.limit');
 Route::get('blogs/{blog}', [BlogViewController::class, 'show']);
 
 Route::get('signup', [SignUpController::class, 'index']);
@@ -39,4 +40,5 @@ Route::middleware('auth')->group(function (){
     Route::post('mypage/blogs/create', [BlogMypageController::class, 'store']);
     Route::get('mypage/blogs/edit/{blog}', [BlogMypageController::class, 'edit'])->name('mypage.blog.edit');
     Route::post('mypage/blogs/edit/{blog}', [BlogMypageController::class, 'update'])->name('mypage.blog.update');
+    Route::delete('mypage/blogs/delete/{blog}', [BlogMypageController::class, 'destroy'])->name('mypage.blog.delete');
 });

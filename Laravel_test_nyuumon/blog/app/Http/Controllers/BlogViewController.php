@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\StrRandom;
 use Illuminate\Http\Request;
+use Facades\Illuminate\Support\Str;
 
 class BlogViewController extends Controller
 {
@@ -29,6 +31,14 @@ class BlogViewController extends Controller
             abort(403);
         }
 
-        return view('blog.show', compact('blog'));
+        // Facadesの場合
+        // $random = Str::random(10);
+
+        // Facades以外の場合
+        // $random = (new StrRandom)->random(10);
+        $random = app(StrRandom::class)->random(10);
+
+
+        return view('blog.show', compact('blog', 'random'));
     }
 }
